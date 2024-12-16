@@ -1,0 +1,14 @@
+../Core/Lora/Src/Lora.cpp:36:6:void Lora_init()	1
+../Core/Lora/Src/Lora.cpp:43:6:void Lora_Operation_TX()	1
+../Core/Lora/Src/Lora.cpp:57:6:void RunTXStateMachine()	6
+../Core/Lora/Src/Lora.cpp:96:6:void ConfigureRadioTx(SX126xHal*, RadioConfigurations_t*)	1
+../Core/Lora/Src/Lora.cpp:100:6:void PrepareBuffer(SX126xHal*, const uint8_t (*)[4])	1
+../Core/Lora/Src/Lora.cpp:104:6:void OnTxDone()	1
+../Core/Lora/Src/Lora.cpp:111:6:void OnRxDone()	1
+../Core/Lora/Src/Lora.cpp:118:6:void OnTxTimeout()	1
+../Core/Lora/Src/Lora.cpp:125:6:void SetConfiguration(RadioConfigurations_t*)	1
+../Core/Lora/Src/Lora.cpp:147:6:void ConfigureGeneralRadio(SX126xHal*, RadioConfigurations_t*)	1
+../Core/Lora/Src/Lora.cpp:162:6:void HAL_GPIO_EXTI_Rising_Callback(uint16_t)	2
+../Core/Lora/Src/Lora.cpp:173:1:void __static_initialization_and_destruction_0(int, int)	5
+../Core/Lora/Src/Lora.cpp:173:1:cpp)	1
+../Core/Lora/Src/Lora.cpp:173:1:cpp)	1

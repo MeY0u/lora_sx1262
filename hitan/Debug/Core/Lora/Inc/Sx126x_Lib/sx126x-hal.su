@@ -1,0 +1,27 @@
+../Core/Lora/Inc/Sx126x_Lib/radio.hpp:527:5:Radio::Radio(RadioCallbacks_t*)	16	static
+../Core/Lora/Inc/Sx126x_Lib/radio.hpp:539:13:Radio::~Radio()	16	static
+../Core/Lora/Inc/Sx126x_Lib/radio.hpp:539:13:virtual Radio::~Radio()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.hpp:318:5:SX126x::SX126x(RadioCallbacks_t*)	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.hpp:327:13:SX126x::~SX126x()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.hpp:327:13:virtual SX126x::~SX126x()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:21:1:SX126xHal::SX126xHal(SPI_HandleTypeDef*, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t, GPIO_TypeDef*, uint16_t, uint32_t, uint32_t, GPIO_TypeDef*, uint16_t, RadioCallbacks_t*)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:32:1:SX126xHal::~SX126xHal()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:32:1:virtual SX126xHal::~SX126xHal()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:34:6:virtual void SX126xHal::SpiInit()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:46:6:virtual void SX126xHal::IoIrqInit(DioIrqHandler)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:56:6:virtual void SX126xHal::Reset()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:63:6:virtual void SX126xHal::Wakeup()	24	static,ignoring_inline_asm
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:73:6:virtual void SX126xHal::WriteCommand(RadioCommands_t, uint8_t*, uint16_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:81:6:virtual void SX126xHal::ReadCommand(RadioCommands_t, uint8_t*, uint16_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:90:6:virtual void SX126xHal::WriteRegister(uint16_t, uint8_t*, uint16_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:98:6:virtual void SX126xHal::WriteReg(uint16_t, uint8_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:102:6:virtual void SX126xHal::ReadRegister(uint16_t, uint8_t*, uint16_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:112:9:virtual uint8_t SX126xHal::ReadReg(uint16_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:118:6:virtual void SX126xHal::WriteBuffer(uint8_t, uint8_t*, uint8_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:126:6:virtual void SX126xHal::ReadBuffer(uint8_t, uint8_t*, uint8_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:136:9:virtual uint8_t SX126xHal::GetDioStatus()	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:141:9:virtual uint8_t SX126xHal::GetDeviceType()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:145:9:virtual uint8_t SX126xHal::GetFreqSelect()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:149:6:virtual void SX126xHal::AntSwOn()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:153:6:virtual void SX126xHal::AntSwOff()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x-hal.cpp:158:6:void SX126xHal::InvokeHandler()	16	static

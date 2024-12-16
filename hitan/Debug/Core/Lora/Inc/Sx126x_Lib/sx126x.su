@@ -1,0 +1,51 @@
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:42:6:void SX126x::Init()	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:83:6:void SX126x::InitOperationalMode()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:88:6:virtual void SX126x::CheckDeviceReady()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:97:23:virtual RadioOperatingModes_t SX126x::GetOperatingMode()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:103:6:void SX126x::SetPayload(uint8_t*, uint8_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:108:9:uint8_t SX126x::GetPayload(uint8_t*, uint8_t*, uint8_t)	40	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:121:6:void SX126x::SendPayload(uint8_t*, uint8_t, uint32_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:127:9:uint8_t SX126x::SetSyncWord(uint8_t*)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:133:6:void SX126x::SetCrcSeed(uint16_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:151:6:void SX126x::SetCrcPolynomial(uint16_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:169:6:void SX126x::SetWhiteningSeed(uint16_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:187:10:uint32_t SX126x::GetRandom()	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:199:6:void SX126x::SetSleep(SleepParams_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:206:6:void SX126x::SetStandby(RadioStandbyModes_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:212:6:void SX126x::SetTx(uint32_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:223:6:void SX126x::SetFs()	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:233:6:void SX126x::SetRxBoosted(uint32_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:251:6:void SX126x::SetRx(uint32_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:263:6:void SX126x::SetRxDutyCycle(uint32_t, uint32_t)	40	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:277:6:void SX126x::SetCad()	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:283:6:void SX126x::SetTxContinuousWave()	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:291:6:void SX126x::SetTxInfinitePreamble()	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:299:6:void SX126x::SetStopRxTimerOnPreambleDetect(bool)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:304:6:void SX126x::SetLoRaSymbNumTimeout(uint8_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:309:6:void SX126x::SetRegulatorMode(RadioRegulatorMode_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:317:6:void SX126x::Calibrate(CalibrationParams_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:322:6:void SX126x::CalibrateImage(uint32_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:354:6:void SX126x::SetPaConfig(uint8_t, uint8_t, uint8_t, uint8_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:369:6:void SX126x::SetRxTxFallbackMode(uint8_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:374:6:void SX126x::SetDioIrqParams(uint16_t, uint16_t, uint16_t, uint16_t)	40	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:393:10:uint16_t SX126x::GetIrqStatus()	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:401:6:void SX126x::SetDio2AsRfSwitchCtrl(uint8_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:409:6:void SX126x::SetDio3AsTcxoCtrl(RadioTcxoCtrlVoltage_t, uint32_t)	40	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:420:6:void SX126x::SetRfFrequency(uint32_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:432:6:void SX126x::SetPacketType(RadioPacketTypes_t)	24	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:443:20:RadioPacketTypes_t SX126x::GetPacketType()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:448:6:void SX126x::SetTxParams(int8_t, RadioRampTimes_t)	40	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:461:6:void SX126x::SetModulationParams(ModulationParams_t*)	40	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:562:6:void SX126x::SetPacketParams(PacketParams_t*)	40	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:628:6:void SX126x::SetCadParams(RadioLoRaCadSymbols_t, uint8_t, uint8_t, RadioCadExitModes_t, uint32_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:643:6:void SX126x::SetBufferBaseAddresses(uint8_t, uint8_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:656:15:virtual RadioStatus_t SX126x::GetStatus()	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:666:8:int8_t SX126x::GetRssiInst()	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:674:6:void SX126x::GetRxBufferStatus(uint8_t*, uint8_t*)	40	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:693:6:void SX126x::GetPacketStatus(PacketStatus_t*)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:726:14:RadioError_t SX126x::GetDeviceErrors()	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:734:6:void SX126x::ClearIrqStatus(uint16_t)	32	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:745:6:void SX126x::SetPollingMode()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:750:6:void SX126x::SetInterruptMode()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:755:6:void SX126x::OnDioIrq()	16	static
+../Core/Lora/Inc/Sx126x_Lib/sx126x.cpp:772:6:void SX126x::ProcessIrqs()	24	static,ignoring_inline_asm
