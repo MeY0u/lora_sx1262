@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include <string.h>
 #include "Sx126x_Lib/radio.hpp"
 #include "Sx126x_Lib/sx126x.hpp"
 #include "Sx126x_Lib/sx126x-hal.hpp"
@@ -15,8 +16,11 @@ extern "C" {
  */
 typedef enum
 {
-    SEND_PACKET,
-    WAIT_SEND_DONE,
+	SEND_PACKET,
+	WAIT_SEND_DONE,
+    RECEIVE_PACKET,
+	WAIT_RECEIVE_DONE,
+	PACKET_RECEIVED,
 }AppStates_t;
 
 typedef struct{
@@ -40,9 +44,12 @@ typedef struct{
     bool txTimeout;
 }RadioFlags_t;
 
+#define debug_if(x) printf(x)
+
 extern SPI_HandleTypeDef hspi1;
 
 #define MESSAGE_SIZE 4
+#define RX_BUFFER_SIZE 20
 typedef uint8_t Messages_t[MESSAGE_SIZE];
 const Messages_t PingMsg = {'P', 'I', 'N', 'G'};
 
@@ -57,7 +64,7 @@ const Messages_t PingMsg = {'P', 'I', 'N', 'G'};
                                                                   //  1: 250 kHz,
                                                                   //  2: 500 kHz,
                                                                   //  3: Reserved]
-#define LORA_SPREADING_FACTOR                       LORA_SF7         // [SF7..SF12]
+#define LORA_SPREADING_FACTOR                       LORA_SF12         // [SF7..SF12]
 #define LORA_LOWDATARATEOPTIMIZE                    0
 #define LORA_CODINGRATE                             LORA_CR_4_5         // [1: 4/5,
                                                                   //  2: 4/6,
@@ -72,18 +79,24 @@ const Messages_t PingMsg = {'P', 'I', 'N', 'G'};
 #define LORA_CRC_MODE                               LORA_CRC_OFF
 
 #define RX_TIMEOUT_US 200000
-#define BUFFER_SIZE                                     16        // Define the payload size here
+#define BUFFER_SIZE                                     3        // Define the payload size here
 
 void Lora_init( void );
 void Lora_Operation_TX( void );
+void Lora_Operation_RX( void );
 void PrepareBuffer(SX126xHal *radio, const Messages_t *messageToSend);
 void ConfigureRadioTx(SX126xHal *radio, RadioConfigurations_t *config);
+void ConfigureRadioRx(SX126xHal *radio, RadioConfigurations_t *config);
 void OnTxDone( void );
 void OnTxTimeout( void );
+void OnRxTimeout( void );
 void OnRxDone( void );
+void OnRxError( IrqErrorCode_t errCode );
 void SetConfiguration(RadioConfigurations_t *config);
 void ConfigureGeneralRadio(SX126xHal *radio, RadioConfigurations_t *config);
 void RunTXStateMachine( void );
+void RunRXStateMachine( void );
+void GetRssiSnr(int8_t *rssi, int8_t *snr);
 
 #ifdef __cplusplus
 }

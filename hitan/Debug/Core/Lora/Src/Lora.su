@@ -1,14 +1,16 @@
-../Core/Lora/Src/Lora.cpp:36:6:void Lora_init()	8	static
-../Core/Lora/Src/Lora.cpp:43:6:void Lora_Operation_TX()	8	static
-../Core/Lora/Src/Lora.cpp:57:6:void RunTXStateMachine()	8	static
-../Core/Lora/Src/Lora.cpp:96:6:void ConfigureRadioTx(SX126xHal*, RadioConfigurations_t*)	24	static
-../Core/Lora/Src/Lora.cpp:100:6:void PrepareBuffer(SX126xHal*, const uint8_t (*)[4])	16	static
-../Core/Lora/Src/Lora.cpp:104:6:void OnTxDone()	8	static
-../Core/Lora/Src/Lora.cpp:111:6:void OnRxDone()	8	static
-../Core/Lora/Src/Lora.cpp:118:6:void OnTxTimeout()	8	static
-../Core/Lora/Src/Lora.cpp:125:6:void SetConfiguration(RadioConfigurations_t*)	16	static
-../Core/Lora/Src/Lora.cpp:147:6:void ConfigureGeneralRadio(SX126xHal*, RadioConfigurations_t*)	16	static
-../Core/Lora/Src/Lora.cpp:162:6:void HAL_GPIO_EXTI_Rising_Callback(uint16_t)	16	static
-../Core/Lora/Src/Lora.cpp:173:1:void __static_initialization_and_destruction_0(int, int)	80	static
-../Core/Lora/Src/Lora.cpp:173:1:cpp)	8	static
-../Core/Lora/Src/Lora.cpp:173:1:cpp)	8	static
+../Core/Lora/Src/Lora.cpp:39:6:void Lora_init()	8	static
+../Core/Lora/Src/Lora.cpp:46:6:void Lora_Operation_RX()	8	static
+../Core/Lora/Src/Lora.cpp:55:6:void RunRXStateMachine()	8	static
+../Core/Lora/Src/Lora.cpp:91:6:void ConfigureRadioTx(SX126xHal*, RadioConfigurations_t*)	24	static
+../Core/Lora/Src/Lora.cpp:95:6:void ConfigureRadioRx(SX126xHal*, RadioConfigurations_t*)	24	static
+../Core/Lora/Src/Lora.cpp:99:6:void PrepareBuffer(SX126xHal*, const uint8_t (*)[4])	16	static
+../Core/Lora/Src/Lora.cpp:103:6:void OnRxDone()	8	static
+../Core/Lora/Src/Lora.cpp:111:6:void OnRxTimeout()	4	static
+../Core/Lora/Src/Lora.cpp:116:6:void OnRxError(IrqErrorCode_t)	16	static
+../Core/Lora/Src/Lora.cpp:121:6:void SetConfiguration(RadioConfigurations_t*)	16	static
+../Core/Lora/Src/Lora.cpp:144:6:void ConfigureGeneralRadio(SX126xHal*, RadioConfigurations_t*)	16	static
+../Core/Lora/Src/Lora.cpp:159:6:void HAL_GPIO_EXTI_Rising_Callback(uint16_t)	16	static
+../Core/Lora/Src/Lora.cpp:172:6:void GetRssiSnr(int8_t*, int8_t*)	40	static
+../Core/Lora/Src/Lora.cpp:178:1:void __static_initialization_and_destruction_0(int, int)	80	static
+../Core/Lora/Src/Lora.cpp:178:1:cpp)	8	static
+../Core/Lora/Src/Lora.cpp:178:1:cpp)	8	static

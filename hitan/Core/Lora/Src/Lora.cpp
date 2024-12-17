@@ -4,18 +4,18 @@
  * Radio events function pointer
  */
 static RadioCallbacks_t RadioEvents = {
-    .txDone = &OnTxDone,
+    .txDone = NULL,
     .rxDone = &OnRxDone,
     .rxPreambleDetect = NULL,
     .rxSyncWordDone = NULL,
     .rxHeaderDone = NULL,
-    .txTimeout = &OnTxTimeout,
-    .rxTimeout = NULL,
-    .rxError = NULL,
+    .txTimeout = NULL,
+    .rxTimeout = &OnRxTimeout,
+    .rxError = &OnRxError,
     .cadDone = NULL,
 };
 
-volatile AppStates_t State = SEND_PACKET;
+volatile AppStates_t RxState = RECEIVE_PACKET;
 
 RadioConfigurations_t radioConfiguration;
 RadioFlags_t radioFlags = {
@@ -31,7 +31,10 @@ SX126xHal Radio(&hspi1, SX_SPI1_CS_GPIO_Port, SX_SPI1_CS_Pin,
 				SX_RESET_GPIO_Port, SX_RESET_Pin, SX_Mode_FRx_Pin, SX_Mode_SX126X_Pin,
 				SX_ANT_SW_GPIO_Port, SX_ANT_SW_Pin, &RadioEvents);
 
-bool proceed = true;
+uint8_t RxBufferSize = RX_BUFFER_SIZE;
+uint8_t RxBuffer[RX_BUFFER_SIZE];
+int8_t RssiValue = 0;
+int8_t SnrValue = 0;
 
 void Lora_init()
 {
@@ -40,86 +43,79 @@ void Lora_init()
 	ConfigureGeneralRadio(&Radio, &radioConfiguration);
 }
 
-void Lora_Operation_TX()
+void Lora_Operation_RX()
 {
 	Lora_init();
-	// initialize transmitter
-	printf("-->TX mode\n");
-	State = SEND_PACKET;
+	RxState = RECEIVE_PACKET;
 	while(true){
-		RunTXStateMachine();
+		RunRXStateMachine();
 	}
 }
 
-// let's keep the state machine because waiting for transmission to be done
-// will take multiple instances of the state machine running. We could use a
-// for loop, but the state machine seems g
-void RunTXStateMachine(){
-    switch(State){
-        case SEND_PACKET:{
-           if (proceed == true) {
-                // wait for timer to say it's fine to proceed with transmission
-                proceed = false;
-                PrepareBuffer(&Radio, messageToSend);
-                ConfigureRadioTx(&Radio, &radioConfiguration);
-                /*
-                uint32_t value = Radio.ReadReg(0x0889);
-                value = value | 0x04;
-                Radio.WriteReg(0x0889, value);
-                 */
-                Radio.SetTx(radioConfiguration.txTimeout);
-                HAL_GPIO_WritePin(SX_LED_TX_GPIO_Port, SX_LED_TX_Pin, GPIO_PIN_SET); // Turn LED On
-                State = WAIT_SEND_DONE;
-            }
-            break;
-        }
+void RunRXStateMachine(){
+	switch(RxState){
+		case RECEIVE_PACKET:{
+			ConfigureRadioRx(&Radio, &radioConfiguration);
+			Radio.SetRx(radioConfiguration.rxTimeout);
+			RxState = WAIT_RECEIVE_DONE;
+			break;
+		}
+		case WAIT_RECEIVE_DONE:{
+			if(radioFlags.rxDone == true){
+				radioFlags.rxDone = false;
+				RxState = PACKET_RECEIVED;
+	        }
+			if(radioFlags.rxTimeout == true){
+				radioFlags.rxTimeout = false;
+				RxState = RECEIVE_PACKET;
+	        }
+			break;
+		}
 
-        case WAIT_SEND_DONE:{
-            if(radioFlags.txDone){
-                // transmission successful, wait
-                radioFlags.txDone = false;  // reset interrupted flag
-                printf("TX done\r\n");
-                State = SEND_PACKET;
-                HAL_Delay(200);
-            }
-            if(radioFlags.txTimeout){
-                // transmission failed, try again!
-                radioFlags.txTimeout = false;  // reset interrupted flag
-                printf("Tx Timeout\n\r" );
-                State = SEND_PACKET;
-            }
-            break;
-        }
-    }
+	    case PACKET_RECEIVED:{
+	    	Radio.GetPayload( RxBuffer, &RxBufferSize, RX_BUFFER_SIZE );
+	    	RssiValue = Radio.GetRssiInst();
+	    	GetRssiSnr(&RssiValue, &SnrValue);
+	    	/*
+	    	printf("Rssi : %u SNR: %u", RssiValue, SnrValue);
+	    	for (size_t i = 0; i < RX_BUFFER_SIZE; i++) {
+	    		printf("Element %zu: %u\n", i, RxBuffer[i]); // %u for unsigned int
+	    	}
+			*/
+	    	RxState = RECEIVE_PACKET;
+	    	break;
+	    }
+	}
 }
 
 void ConfigureRadioTx(SX126xHal *radio, RadioConfigurations_t *config){
     radio->SetDioIrqParams(config->irqTx, config->irqTx, IRQ_RADIO_NONE, IRQ_RADIO_NONE);
 }
 
+void ConfigureRadioRx(SX126xHal *radio, RadioConfigurations_t *config){
+    radio->SetDioIrqParams(config->irqRx, config->irqRx, IRQ_RADIO_NONE, IRQ_RADIO_NONE);
+}
+
 void PrepareBuffer(SX126xHal *radio, const Messages_t *messageToSend){
     radio->SetPayload((uint8_t*)messageToSend, MESSAGE_SIZE);
 }
 
-void OnTxDone( void )
-{
-	proceed = true;
-    radioFlags.txDone = true;
-    HAL_GPIO_WritePin(SX_LED_TX_GPIO_Port, SX_LED_TX_Pin, GPIO_PIN_RESET); // Turn LED On
-}
-
 void OnRxDone( void )
 {
-	proceed = true;
+    HAL_GPIO_WritePin(SX_LED_RX_GPIO_Port, SX_LED_RX_Pin, GPIO_PIN_SET); // Turn LED On
     radioFlags.rxDone= true;
+    printf("Rx done\n");
     HAL_GPIO_WritePin(SX_LED_RX_GPIO_Port, SX_LED_RX_Pin, GPIO_PIN_RESET); // Turn LED On
 }
 
-void OnTxTimeout( void )
+void OnRxTimeout( void )
 {
-    radioFlags.txTimeout = true;
-    proceed = true;
-    HAL_GPIO_WritePin(SX_LED_TX_GPIO_Port, SX_LED_TX_Pin, GPIO_PIN_RESET); // Turn LED On
+    radioFlags.rxTimeout = true;
+}
+
+void OnRxError( IrqErrorCode_t errCode )
+{
+    radioFlags.rxError = true;
 }
 
 void SetConfiguration(RadioConfigurations_t *config){
@@ -127,7 +123,8 @@ void SetConfiguration(RadioConfigurations_t *config){
     config->irqTx = IRQ_TX_DONE | IRQ_RX_TX_TIMEOUT;
     config->rfFrequency = RF_FREQUENCY;
     config->txTimeout = 50000;
-    config->rxTimeout = (uint32_t)(RX_TIMEOUT_US / 15.625);
+    //config->rxTimeout = (uint32_t)(RX_TIMEOUT_US / 15.625);
+    config->rxTimeout = 50000;
     config->txPower = TX_OUTPUT_POWER;
     config->txRampTime = RADIO_RAMP_10_US;
     config->packetType = PACKET_TYPE_LORA;
@@ -170,4 +167,12 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
   if(GPIO_Pin == SX_DIO1_Pin){
 	  Radio.InvokeHandler();
   }
+}
+
+void GetRssiSnr(int8_t *rssi, int8_t *snr)
+{
+    PacketStatus_t pkt_stat;
+    Radio.GetPacketStatus(&pkt_stat);
+    *rssi = pkt_stat.Params.LoRa.RssiPkt;
+    *snr = pkt_stat.Params.LoRa.SnrPkt;
 }
