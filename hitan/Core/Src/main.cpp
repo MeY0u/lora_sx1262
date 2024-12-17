@@ -128,8 +128,8 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   printf("INIT FINISH\n");
-  //Lora_Operation_TX();
-  Lora_Operation_RX();
+  Lora_Operation_TX();
+  //Lora_Operation_RX();
   while (1)
   {
 

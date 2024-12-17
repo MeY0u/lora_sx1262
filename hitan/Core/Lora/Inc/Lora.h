@@ -78,7 +78,8 @@ const Messages_t PingMsg = {'P', 'I', 'N', 'G'};
 #define LORA_IQ                                     LORA_IQ_NORMAL
 #define LORA_CRC_MODE                               LORA_CRC_OFF
 
-#define RX_TIMEOUT_US 200000
+#define RX_TIMEOUT_US 								50000
+#define TX_TIMEOUT_US 								50000
 #define BUFFER_SIZE                                     3        // Define the payload size here
 
 void Lora_init( void );
