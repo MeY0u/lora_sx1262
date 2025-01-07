@@ -38,7 +38,8 @@ Core/Lora/Src/Lora.o: ../Core/Lora/Src/Lora.cpp \
  ../Core/Lora/Src/../Inc/Sx126x_Lib/sx126x.hpp ../Core/Inc/main.h \
  ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo.h \
  ../Core/Inc/stm32u5xx_nucleo_conf.h \
- ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo_errno.h
+ ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo_errno.h \
+ ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_def.h
 ../Core/Lora/Src/../Inc/Lora.h:
 ../Core/Lora/Src/../Inc/Sx126x_Lib/radio.hpp:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal.h:
@@ -80,3 +81,4 @@ Core/Lora/Src/Lora.o: ../Core/Lora/Src/Lora.cpp \
 ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo.h:
 ../Core/Inc/stm32u5xx_nucleo_conf.h:
 ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo_errno.h:
+../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_def.h:

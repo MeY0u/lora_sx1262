@@ -87,8 +87,8 @@ all: main-build
 main-build: hitan.elf secondary-outputs
 
 # Tool invocations
-hitan.elf hitan.map: $(OBJS) $(USER_OBJS) C:\Users\avi27\Projects\lora_sx1262_nucleo\hitan\STM32U5A5ZJTXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "hitan.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\avi27\Projects\lora_sx1262_nucleo\hitan\STM32U5A5ZJTXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="hitan.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+hitan.elf hitan.map: $(OBJS) $(USER_OBJS) C:\Genadi\Work\army\Hitan_liron\Lora_sx1262\lora_sx1262\hitan\STM32U5A5ZJTXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "hitan.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Genadi\Work\army\Hitan_liron\Lora_sx1262\lora_sx1262\hitan\STM32U5A5ZJTXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="hitan.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
