@@ -48,10 +48,13 @@ typedef struct{
 
 extern SPI_HandleTypeDef hspi1;
 
-#define MESSAGE_SIZE 4
+#define tag_dest 22
+#define ANCHOR_NUM 3
+#define MESSAGE_SIZE 1
 #define RX_BUFFER_SIZE 20
 typedef uint8_t Messages_t[MESSAGE_SIZE];
-const Messages_t PingMsg = {'P', 'I', 'N', 'G'};
+//const Messages_t PingMsg = {'L', 'I', 'R', 'O'};
+#define MAX_INDEX 255
 
 /* Set this flag to '1' to use the LoRa modulation or to '0' to use FSK modulation */
 #define USE_MODEM_LORA  1
@@ -60,17 +63,17 @@ const Messages_t PingMsg = {'P', 'I', 'N', 'G'};
 #define RF_FREQUENCY                                    868000000 // Hz
 #define TX_OUTPUT_POWER                                 22         // max 22 dBm
 
-#define LORA_BANDWIDTH                              LORA_BW_500         // [0: 125 kHz,
+#define LORA_BANDWIDTH                              LORA_BW_500   // [0: 125 kHz,
                                                                   //  1: 250 kHz,
                                                                   //  2: 500 kHz,
                                                                   //  3: Reserved]
-#define LORA_SPREADING_FACTOR                       LORA_SF12         // [SF7..SF12]
+#define LORA_SPREADING_FACTOR                       LORA_SF10      // [SF7..SF12]
 #define LORA_LOWDATARATEOPTIMIZE                    0
-#define LORA_CODINGRATE                             LORA_CR_4_5         // [1: 4/5,
+#define LORA_CODINGRATE                             LORA_CR_4_5   // [1: 4/5,
                                                                   //  2: 4/6,
                                                                   //  3: 4/7,
                                                                   //  4: 4/8]
-#define LORA_PREAMBLE_LENGTH                        16         // Same for Tx and Rx
+#define LORA_PREAMBLE_LENGTH                        16        // Same for Tx and Rx
 #define LORA_SYMBOL_TIMEOUT                         5         // Symbols
 #define LORA_HEADER_TYPE                            LORA_PACKET_VARIABLE_LENGTH
 #define LORA_FHSS_ENABLED                           false
@@ -80,7 +83,7 @@ const Messages_t PingMsg = {'P', 'I', 'N', 'G'};
 
 #define RX_TIMEOUT_US 								50000
 #define TX_TIMEOUT_US 								50000
-#define BUFFER_SIZE                                     3        // Define the payload size here
+#define BUFFER_SIZE                                     4        // Define the payload size here
 
 void Lora_init( void );
 void Lora_Operation_TX( void );

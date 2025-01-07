@@ -152,10 +152,10 @@ int _stat(char *file, struct stat *st)
   return 0;
 }
 
-int _link(char *old, char *new)
+int _link(char *old, char *_new)
 {
   (void)old;
-  (void)new;
+  (void)_new;
   errno = EMLINK;
   return -1;
 }

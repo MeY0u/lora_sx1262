@@ -767,7 +767,7 @@ public:
 
      /*
       * Initial Operational mode
-      * Author: Aviad Cohen
+      * Author: Aviad Cohen + Genadi 10^9
       */
      void InitOperationalMode( void );
     /*!
