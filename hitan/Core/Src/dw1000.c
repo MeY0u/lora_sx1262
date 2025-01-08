@@ -1,4 +1,7 @@
 #include "dw1000.h"
+#include "main.h"
+extern LoraRxInfo_t rxInfo;
+
 
 int	dwmInit(){
 	/* Reset and initialise DW1000.
@@ -17,7 +20,7 @@ int	dwmInit(){
 }
 
 void dwConfig(dwt_config_t *config){
-	//dwt_setlnapamode(0x03); //While using PA LNA Enable
+	dwt_setlnapamode(0x03); //While using PA LNA Enable
 
 
 	    port_set_dw1000_fastrate();
@@ -38,11 +41,10 @@ void dwConfig(dwt_config_t *config){
 	    //printf("0x1E = %x\n\r",dwt_read32bitreg(TX_POWER_ID));
 	    dwt_setleds(LEDS_ON);
 
-	    //set lower SNR for NLOS operation
-	   /* dwt_write8bitoffsetreg(LDE_IF_ID, LDE_CFG1_OFFSET, 0x07); //refer user manual pg.175
-	    dwt_write16bitoffsetreg(LDE_IF_ID, LDE_CFG2_OFFSET, 0x0003); //refer user manual pg.177*/
-	    //printf("0x2E = %x\n\r",dwt_read32bitreg(LDE_IF_ID));
-
+	    if(config->prf==DWT_PRF_16M){ //set lower SNR treshould for NLOS operation
+		   dwt_write8bitoffsetreg(LDE_IF_ID, LDE_CFG1_OFFSET, 0x07); //refer user manual pg.175
+		   dwt_write16bitoffsetreg(LDE_IF_ID, LDE_CFG2_OFFSET, 0x0003); //refer user manual pg.177
+		}
 	    /* Set expected response's delay and timeout. See NOTE 1 and 5 below.
 	     * As this example only handles one incoming frame with always the same delay and timeout, those values can be set here once for all. */
 	    dwt_setrxaftertxdelay(POLL_TX_TO_RESP_RX_DLY_UUS);
@@ -51,107 +53,122 @@ void dwConfig(dwt_config_t *config){
 }
 int dwRange(void)
 {
-	//uint32 counter =0;
-	uint8 tag_dest;
-    /* Display application name on LCD. */
-    //lcd_display_str(APP_NAME);
+	uint8_t tag_dest;
+	HAL_UART_Receive(hcom_uart,(uint8_t*)&tag_dest,sizeof(tag_dest),HAL_MAX_DELAY);
+	//WDT_Refresh(); //Refresh the Watchdog counter
 
-    /* Loop forever initiating ranging exchanges. */
-  /*  for(int i = 0; i < SAMPLES ; i++)
-    {*/
-    	HAL_UART_Receive(&hcom_uart,(uint8_t*)&tag_dest,sizeof(tag_dest),HAL_MAX_DELAY);
+	tx_poll_msg[TAG_DEST_POLL_IDX7] = tag_dest;
+	tx_poll_msg[TAG_DEST_POLL_IDX8] = tag_dest;
+	rx_resp_msg[TAG_DEST_RESP_IDX6] = tag_dest;
+	rx_resp_msg[TAG_DEST_RESP_IDX5] = tag_dest;
+	//HAL_GPIO_TogglePin(TIMING_GPIO_GPIO_Port, TIMING_GPIO_Pin);
+	/* Write frame data to DW1000 and prepare transmission. See NOTE 7 below. */
+	tx_poll_msg[ALL_MSG_SN_IDX] = frame_seq_nb;
+	dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_TXFRS);
+	dwt_writetxdata(sizeof(tx_poll_msg), tx_poll_msg, 0); /* Zero offset in TX buffer. */
+	dwt_writetxfctrl(sizeof(tx_poll_msg), 0, 1); /* Zero offset in TX buffer, ranging. */
 
-    	WDT_Refresh(); //Refresh the Watchdog counter
+	/* Start transmission, indicating that a response is expected so that reception is enabled automatically after the frame is sent and the delay
+	 * set by dwt_setrxaftertxdelay() has elapsed. */
+	dwt_starttx(DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED);
 
-    	tx_poll_msg[TAG_DEST_POLL_IDX7] = tag_dest;
-    	tx_poll_msg[TAG_DEST_POLL_IDX8] = tag_dest;
-    	rx_resp_msg[TAG_DEST_RESP_IDX6] = tag_dest;
-    	rx_resp_msg[TAG_DEST_RESP_IDX5] = tag_dest;
-    	//HAL_GPIO_TogglePin(TIMING_GPIO_GPIO_Port, TIMING_GPIO_Pin);
-        /* Write frame data to DW1000 and prepare transmission. See NOTE 7 below. */
-        tx_poll_msg[ALL_MSG_SN_IDX] = frame_seq_nb;
-        dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_TXFRS);
-        dwt_writetxdata(sizeof(tx_poll_msg), tx_poll_msg, 0); /* Zero offset in TX buffer. */
-        dwt_writetxfctrl(sizeof(tx_poll_msg), 0, 1); /* Zero offset in TX buffer, ranging. */
+	/* We assume that the transmission is achieved correctly, poll for reception of a frame or error/timeout. See NOTE 8 below. */
+	while (!((status_reg = dwt_read32bitreg(SYS_STATUS_ID)) & (SYS_STATUS_RXFCG | SYS_STATUS_ALL_RX_TO | SYS_STATUS_ALL_RX_ERR))) {
+		//WDT_Refresh();
+	};
 
-        /* Start transmission, indicating that a response is expected so that reception is enabled automatically after the frame is sent and the delay
-         * set by dwt_setrxaftertxdelay() has elapsed. */
-        //printf("TX %u \n\r",counter++);
+	/* Increment frame sequence number after transmission of the poll message (modulo 256). */
+	frame_seq_nb++;
 
-        //printf("try find tag %u \n\r",(uint8)tag_dest);
-        dwt_starttx(DWT_START_TX_IMMEDIATE | DWT_RESPONSE_EXPECTED);
+	if (status_reg & SYS_STATUS_RXFCG) {
+		uint32 frame_len;
+		/* Clear good RX frame event in the DW1000 status register. */
+		dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_RXFCG);
 
-        /* We assume that the transmission is achieved correctly, poll for reception of a frame or error/timeout. See NOTE 8 below. */
-        while (!((status_reg = dwt_read32bitreg(SYS_STATUS_ID)) & (SYS_STATUS_RXFCG | SYS_STATUS_ALL_RX_TO | SYS_STATUS_ALL_RX_ERR)))
-        {
-        	//WDT_Refresh();
-        };
+		/* A frame has been received, read it into the local buffer. */
+		frame_len = dwt_read32bitreg(RX_FINFO_ID) & RX_FINFO_RXFLEN_MASK;
+		if (frame_len <= RX_BUF_LEN) {
+			dwt_readrxdata(rx_buffer, frame_len, 0);
+		}
 
-        /* Increment frame sequence number after transmission of the poll message (modulo 256). */
-        frame_seq_nb++;
+		/* Check that the frame is the expected response from the companion "SS TWR responder" example.
+		 * As the sequence number field of the frame is not relevant, it is cleared to simplify the validation of the frame. */
+		rx_buffer[ALL_MSG_SN_IDX] = 0;
+		if (memcmp(rx_buffer, rx_resp_msg, ALL_MSG_COMMON_LEN) == 0) {
+			uint32 poll_tx_ts, resp_rx_ts, poll_rx_ts, resp_tx_ts;
+			int32 rtd_init, rtd_resp;
+			float clockOffsetRatio ;
 
-        if (status_reg & SYS_STATUS_RXFCG)
-        {
-            uint32 frame_len;
+			/* Retrieve poll transmission and response reception timestamps. See NOTE 9 below. */
+			poll_tx_ts = dwt_readtxtimestamplo32();
+			resp_rx_ts = dwt_readrxtimestamplo32();
 
-            /* Clear good RX frame event in the DW1000 status register. */
-            dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_RXFCG);
+			/* Read carrier integrator value and calculate clock offset ratio. See NOTE 11 below. */
+			clockOffsetRatio = dwt_readcarrierintegrator() * (FREQ_OFFSET_MULTIPLIER * HERTZ_TO_PPM_MULTIPLIER_CHAN_2 / 1.0e6) ;
 
-            /* A frame has been received, read it into the local buffer. */
-            frame_len = dwt_read32bitreg(RX_FINFO_ID) & RX_FINFO_RXFLEN_MASK;
-            if (frame_len <= RX_BUF_LEN)
-            {
-                dwt_readrxdata(rx_buffer, frame_len, 0);
-            }
+			/* Get timestamps embedded in response message. */
+			resp_msg_get_ts(&rx_buffer[RESP_MSG_POLL_RX_TS_IDX], &poll_rx_ts);
+			resp_msg_get_ts(&rx_buffer[RESP_MSG_RESP_TX_TS_IDX], &resp_tx_ts);
 
-            /* Check that the frame is the expected response from the companion "SS TWR responder" example.
-             * As the sequence number field of the frame is not relevant, it is cleared to simplify the validation of the frame. */
-            rx_buffer[ALL_MSG_SN_IDX] = 0;
-            if (memcmp(rx_buffer, rx_resp_msg, ALL_MSG_COMMON_LEN) == 0)
-            {
-                uint32 poll_tx_ts, resp_rx_ts, poll_rx_ts, resp_tx_ts;
-                int32 rtd_init, rtd_resp;
-                float clockOffsetRatio ;
+			/* Compute time of flight and distance, using clock offset ratio to correct for differing local and remote clock rates */
+			rtd_init = resp_rx_ts - poll_tx_ts;
+			rtd_resp = resp_tx_ts - poll_rx_ts;
 
-                /* Retrieve poll transmission and response reception timestamps. See NOTE 9 below. */
-                poll_tx_ts = dwt_readtxtimestamplo32();
-                resp_rx_ts = dwt_readrxtimestamplo32();
+			tof = ((rtd_init - rtd_resp * (1 - clockOffsetRatio)) / 2.0) * DWT_TIME_UNITS;
+			distance = tof * SPEED_OF_LIGHT;
+			if (rxInfo.new_data){
+				__disable_irq();
+				printf("*0x%x:0x%x:%3.2f|0x%x:%3.1f:%d:%d#\n\r",ANCHOR_NUM, tag_dest, distance,ANCHOR_NUM,rxInfo.rssi,rxInfo.snr,*rxInfo.buffer);
+				rxInfo.new_data = false;
+				free(rxInfo.buffer);
+				__enable_irq();
+			}
+			else {
+				__disable_irq();
+				printf("*0x%x:0x%x:%3.2f#\n\r",ANCHOR_NUM, tag_dest, distance);
+				__enable_irq();
+			}
+		}
+		else{
+			if (rxInfo.new_data){
+				__disable_irq();
+				printf("*0x%x:0x%x:0000|0x%x:%3.1f:%d:%d#\n\r",ANCHOR_NUM, tag_dest,ANCHOR_NUM,rxInfo.rssi,rxInfo.snr,*rxInfo.buffer);
+				rxInfo.new_data = false;
+				free(rxInfo.buffer);
+				__enable_irq();
+			}
+			else {
+				__disable_irq();
+				printf("*0x%x:0x%x:0000#\n\r",ANCHOR_NUM, tag_dest);
+				__enable_irq();
+			}
+		}
+	}
+	else {
 
-                /* Read carrier integrator value and calculate clock offset ratio. See NOTE 11 below. */
-                clockOffsetRatio = dwt_readcarrierintegrator() * (FREQ_OFFSET_MULTIPLIER * HERTZ_TO_PPM_MULTIPLIER_CHAN_2 / 1.0e6) ;
+		/* Clear RX error/timeout events in the DW1000 status register. */
+		dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_ALL_RX_TO | SYS_STATUS_ALL_RX_ERR);
+		if (rxInfo.new_data){
+				__disable_irq();
+				printf("*0x%x:0x%x:0000|0x%x:%3.1f:%d:%d#\n\r",ANCHOR_NUM, tag_dest,ANCHOR_NUM,rxInfo.rssi,rxInfo.snr,*rxInfo.buffer);
+				rxInfo.new_data = false;
+				free(rxInfo.buffer);
+				__enable_irq();
+			}
+			else {
+				__disable_irq();
+				printf("*0x%x:0x%x:0000#\n\r",ANCHOR_NUM, tag_dest);
+				__enable_irq();
+			}
+		/* Reset RX to properly reinitialize LDE operation. */
+		dwt_rxreset();
+	}
 
-                /* Get timestamps embedded in response message. */
-                resp_msg_get_ts(&rx_buffer[RESP_MSG_POLL_RX_TS_IDX], &poll_rx_ts);
-                resp_msg_get_ts(&rx_buffer[RESP_MSG_RESP_TX_TS_IDX], &resp_tx_ts);
+	/* Execute a delay between ranging exchanges. */
+	//Sleep(RNG_DELAY_MS);
+	//HAL_GPIO_TogglePin(TIMING_GPIO_GPIO_Port, TIMING_GPIO_Pin);
 
-                /* Compute time of flight and distance, using clock offset ratio to correct for differing local and remote clock rates */
-                rtd_init = resp_rx_ts - poll_tx_ts;
-                rtd_resp = resp_tx_ts - poll_rx_ts;
-
-                tof = ((rtd_init - rtd_resp * (1 - clockOffsetRatio)) / 2.0) * DWT_TIME_UNITS;
-                distance = tof * SPEED_OF_LIGHT;
-
-				printf("0x%x:0x%x:%3.2f |\n\r",ANCHOR_NUM, tag_dest, distance);
-            }
-            else
-            {
-            	printf("0x%x:0x%x:0000 |\n\r",ANCHOR_NUM, tag_dest);
-            }
-        }
-        else
-        {
-            /* Clear RX error/timeout events in the DW1000 status register. */
-            dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_ALL_RX_TO | SYS_STATUS_ALL_RX_ERR);
-            printf("0x%x:0x%x:0000 |\n\r",ANCHOR_NUM, tag_dest);
-            /* Reset RX to properly reinitialise LDE operation. */
-            dwt_rxreset();
-        }
-
-        /* Execute a delay between ranging exchanges. */
-        //Sleep(RNG_DELAY_MS);
-        //HAL_GPIO_TogglePin(TIMING_GPIO_GPIO_Port, TIMING_GPIO_Pin);
-
-    }
+}
 
 
 /*! ------------------------------------------------------------------------------------------------------------------

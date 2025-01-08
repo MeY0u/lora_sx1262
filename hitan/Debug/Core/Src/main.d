@@ -33,6 +33,13 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
  ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo.h \
  ../Core/Inc/stm32u5xx_nucleo_conf.h \
  ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo_errno.h \
+ ../Core/Inc/dw1000.h ../Core/Inc/./decadriver/deca_device_api.h \
+ ../Core/Inc/./decadriver/deca_regs.h \
+ ../Core/Inc/./decadriver/deca_version.h \
+ ../Core/Inc/./platform/deca_spi.h \
+ ../Core/Inc/./platform/../decadriver/deca_types.h \
+ ../Core/Inc/./platform/port.h \
+ ../Core/Inc/./platform/../compiler/compiler.h \
  ../Core/Src/../Lora/Inc/Lora.h \
  ../Core/Src/../Lora/Inc/Sx126x_Lib/radio.hpp \
  ../Core/Src/../Lora/Inc/Sx126x_Lib/sx126x.hpp \
@@ -74,6 +81,14 @@ Core/Src/main.o: ../Core/Src/main.cpp ../Core/Inc/main.h \
 ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo.h:
 ../Core/Inc/stm32u5xx_nucleo_conf.h:
 ../Drivers/BSP/STM32U5xx_Nucleo/stm32u5xx_nucleo_errno.h:
+../Core/Inc/dw1000.h:
+../Core/Inc/./decadriver/deca_device_api.h:
+../Core/Inc/./decadriver/deca_regs.h:
+../Core/Inc/./decadriver/deca_version.h:
+../Core/Inc/./platform/deca_spi.h:
+../Core/Inc/./platform/../decadriver/deca_types.h:
+../Core/Inc/./platform/port.h:
+../Core/Inc/./platform/../compiler/compiler.h:
 ../Core/Src/../Lora/Inc/Lora.h:
 ../Core/Src/../Lora/Inc/Sx126x_Lib/radio.hpp:
 ../Core/Src/../Lora/Inc/Sx126x_Lib/sx126x.hpp:

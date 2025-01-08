@@ -38,8 +38,11 @@ CPP_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+Core/Lora/Inc/Sx126x_Lib \
 Core/Lora/Src \
+Core/Src/decadriver \
 Core/Src \
+Core/Src/platform \
 Core/Startup \
 Drivers/BSP/STM32U5xx_Nucleo \
 Drivers/STM32U5xx_HAL_Driver/Src \

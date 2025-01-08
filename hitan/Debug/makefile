@@ -12,6 +12,8 @@ RM := rm -rf
 -include Drivers/STM32U5xx_HAL_Driver/Src/subdir.mk
 -include Drivers/BSP/STM32U5xx_Nucleo/subdir.mk
 -include Core/Startup/subdir.mk
+-include Core/Src/platform/subdir.mk
+-include Core/Src/decadriver/subdir.mk
 -include Core/Src/subdir.mk
 -include Core/Lora/Src/subdir.mk
 -include Core/Lora/Inc/Sx126x_Lib/subdir.mk

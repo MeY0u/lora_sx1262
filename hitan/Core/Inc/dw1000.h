@@ -17,11 +17,19 @@
  * @author Decawave
  */
 //#ifdef EX_06A_DEF
+#ifndef DW_H
+#define DW_H
+
 #include <stdio.h>
 #include <string.h>
 
 #include "stdio.h"
 #include "string.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "./decadriver/deca_device_api.h"
 #include "./decadriver/deca_regs.h"
 //#include "ucpd.h"
@@ -39,14 +47,14 @@ extern COM_InitTypeDef BspCOMInit;
 static dwt_config_t config = {
     2,                //Channel number.
     DWT_PRF_64M,      //Pulse repetition frequency.
-	DWT_PLEN_128,     //Preamble length. Used in TX only.
+	DWT_PLEN_256,     //Preamble length. Used in TX only.
     DWT_PAC8,         //Preamble acquisition chunk size. Used in RX only.
     9,                //TX preamble code. Used in TX only.
     9,                //RX preamble code. Used in RX only.
     0,                //0 to use standard SFD, 1 to use non-standard SFD.
     DWT_BR_6M8,       //Data rate.
     DWT_PHRMODE_STD,  //PHY header mode.
-    (129 + 8 - 8)     //SFD timeout (preamble length + 1 + SFD length - PAC size). Used in RX only.
+    (256 + 1 + 8 - 8)     //SFD timeout (preamble length + 1 + SFD length - PAC size). Used in RX only.
 };
 
 /*static dwt_config_t config = {
@@ -62,13 +70,6 @@ static dwt_config_t config = {
     (1025 + 16 - 64)     SFD timeout (preamble length + 1 + SFD length - PAC size). Used in RX only.
 };*/
 
-
-
-/* Default antenna delay values for 64 MHz PRF. See NOTE 2 below. */
-//#define TX_ANT_DLY 16465//16535//16550 //channel 2
-//#define RX_ANT_DLY 16415//16485//16500 //channel 2
-
-#define SAMPLES 10
 
 #define TX_ANT_DLY 16550
 #define RX_ANT_DLY 16500
@@ -112,7 +113,7 @@ static uint32 status_reg = 0;
 /* Delay between frames, in UWB microseconds. See NOTE 1 below. */
 #define POLL_TX_TO_RESP_RX_DLY_UUS 0
 /* Receive response timeout. See NOTE 5 below. */
-#define RESP_RX_TIMEOUT_UUS 1200//3500
+#define RESP_RX_TIMEOUT_UUS 1400//3500
 
 /* Speed of light in air, in metres per second. */
 #define SPEED_OF_LIGHT 299702547
@@ -127,5 +128,13 @@ static double distance;
 /* Declaration of static functions. */
 
 int	dwmInit();
+int dwRange(void);
 void dwConfig(dwt_config_t *config);
 static void resp_msg_get_ts(uint8 *ts_field, uint32 *ts);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+

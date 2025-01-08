@@ -1,4 +1,4 @@
-#include "../Inc/Lora.h"
+#include "../Lora/Inc/Lora.h"
 #include <stm32u5xx_hal_def.h>
 /*!
  * Radio events function pointer
@@ -26,23 +26,32 @@ RadioFlags_t radioFlags = {
 
 //const Messages_t *messageToSend = &PingMsg;
 
+extern LoraRxInfo_t rxInfo;
+
 SX126xHal Radio(&hspi1, SX_SPI1_CS_GPIO_Port, SX_SPI1_CS_Pin,
 				SX_BUSY_GPIO_Port, SX_BUSY_Pin, SX_DIO1_GPIO_Port, SX_DIO1_Pin,
 				NULL, 0, NULL, 0, // Represent DIO2 and DIO3
 				SX_RESET_GPIO_Port, SX_RESET_Pin, SX_Mode_FRx_Pin, SX_Mode_SX126X_Pin,
 				SX_ANT_SW_GPIO_Port, SX_ANT_SW_Pin, &RadioEvents);
 
-uint8_t RxBufferSize = RX_BUFFER_SIZE;
-uint8_t RxBuffer[RX_BUFFER_SIZE];
-int8_t RssiValue = 0;
-int8_t SnrValue = 0;
-int8_t TxCounter = 0;
-bool new_data = false;
+
+
+
 void Lora_init()
 {
+	RxState = RECEIVE_PACKET;
 	Radio.Init();
 	SetConfiguration(&radioConfiguration);
 	ConfigureGeneralRadio(&Radio, &radioConfiguration);
+	Radio.SetRx(radioConfiguration.rxTimeout);
+
+	rxInfo.buffer[0] = 0;
+	rxInfo.buffer[1] = 0;
+	rxInfo.buffer_length = RX_BUFFER_SIZE;
+	rxInfo.rssi = 0;
+	rxInfo.snr = 0;
+	rxInfo.TxCounter = 0;
+	rxInfo.new_data = false;
 }
 
 //void Lora_Operation_RX()
@@ -58,7 +67,7 @@ void Lora_init()
 ////		if(uart_buf != 0){
 //			__disable_irq();
 //			new_data = false;
-//	    	printf("*0x%x:0x%x:0000|0x%x:%d:%d:%d#\n\r",ANCHOR_NUM, tag_dest,ANCHOR_NUM,RssiValue,SnrValue, RxBuffer[0]);
+//	    	printf("*0x%x:0x%x:0000|0x%x:%d:%d:%d#\n\r",ANCHOR_NUM, tag_dest,ANCHOR_NUM,rxInfo.rssi,rxInfo.snr, *rxInfo.buffer);
 //	    	__enable_irq();
 //		}
 //		else{
@@ -79,10 +88,10 @@ void Lora_init()
 //				radioFlags.rxDone = false;
 //				Radio.GetPayload( RxBuffer, &RxBufferSize, RX_BUFFER_SIZE );
 //				//printf("RX = %s\n\r",RxBuffer);
-//				RssiValue = Radio.GetRssiInst();
-//				GetRssiSnr(&RssiValue, &SnrValue);
+//				rxInfo.rssi = Radio.GetRssiInst();
+//				GetRssiSnr(&rxInfo.rssi, &rxInfo.snr);
 //				new_data = true;
-//					    	//printf("%d , %d \n", RssiValue,SnrValue);
+//					    	//printf("%d , %d \n", rxInfo.rssi,rxInfo.snr);
 //				RxState = RECEIVE_PACKET;
 //	        }
 //			if(radioFlags.rxTimeout == true){
@@ -95,10 +104,10 @@ void Lora_init()
 //	    case PACKET_RECEIVED:{
 //	    	Radio.GetPayload( RxBuffer, &RxBufferSize, RX_BUFFER_SIZE );
 //	    	//printf("RX = %s\n\r",RxBuffer);
-//	    	RssiValue = Radio.GetRssiInst();
-//	    	GetRssiSnr(&RssiValue, &SnrValue);
+//	    	rxInfo.rssi = Radio.GetRssiInst();
+//	    	GetRssiSnr(&rxInfo.rssi, &rxInfo.snr);
 //	    	new_data = true;
-//	    	//printf("%d , %d \n", RssiValue,SnrValue);
+//	    	//printf("%d , %d \n", rxInfo.rssi,rxInfo.snr);
 //	    	RxState = RECEIVE_PACKET;
 //	    	break;
 //	    }
@@ -125,10 +134,10 @@ void Lora_init()
 //	    case PACKET_RECEIVED:{
 //	    	Radio.GetPayload( RxBuffer, &RxBufferSize, RX_BUFFER_SIZE );
 //	    	//printf("RX = %s\n\r",RxBuffer);
-//	    	RssiValue = Radio.GetRssiInst();
-//	    	GetRssiSnr(&RssiValue, &SnrValue);
+//	    	rxInfo.rssi = Radio.GetRssiInst();
+//	    	GetRssiSnr(&rxInfo.rssi, &rxInfo.snr);
 //	    	new_data = true;
-//	    	//printf("%d , %d \n", RssiValue,SnrValue);
+//	    	//printf("%d , %d \n", rxInfo.rssi,rxInfo.snr);
 //	    	RxState = RECEIVE_PACKET;
 //	    	break;
 //	    }
@@ -166,6 +175,7 @@ void RunRXStateMachine(){
 				}
 				radioFlags.rxDone = false;
 				RxState = PACKET_RECEIVED;
+				free(rxInfo.buffer);
 
 	        }
 			if(radioFlags.rxTimeout == true){
@@ -176,20 +186,15 @@ void RunRXStateMachine(){
 		}
 
 	    case PACKET_RECEIVED:{
-	    	Radio.GetPayload( RxBuffer, &RxBufferSize, RX_BUFFER_SIZE );
-	    	RssiValue = Radio.GetRssiInst();
-	    	GetRssiSnr(&RssiValue, &SnrValue);
+	    	__disable_irq();
+	    	Radio.GetPayload( rxInfo.buffer, &rxInfo.buffer_length, RX_BUFFER_SIZE );
+	    	rxInfo.rssi = Radio.GetRssiInst();
+	    	rxInfo.new_data = true;
+	    	GetRssiSnr(&rxInfo.rssi, &rxInfo.snr);
 	    	RxState = RECEIVE_PACKET;
-	    	HAL_UART_Receive(hcom_uart,&uart_buf,1,HAL_MAX_DELAY);
-	    	if(uart_buf != 0x0){
-				HAL_GPIO_WritePin(SX_LED_TX_GPIO_Port, SX_LED_TX_Pin, GPIO_PIN_RESET); // Turn LED OFF
-	    		uart_buf = 0;
-	    		__disable_irq();
+	    	printf("%d , %d \n", rxInfo.rssi,rxInfo.snr);
 
-	    		printf("*0x%x:0x%x:0000|0x%x:%d:%d:%d#\n\r",ANCHOR_NUM, tag_dest,ANCHOR_NUM,RssiValue,SnrValue,RxBuffer[0]);
-	    		__enable_irq();
-	    	}
-
+	    	__enable_irq();
 	    	break;
 	    }
 	}
@@ -262,7 +267,7 @@ void OnRxDone( void )
 {
     HAL_GPIO_WritePin(SX_LED_RX_GPIO_Port, SX_LED_RX_Pin, GPIO_PIN_SET); // Turn LED On
     radioFlags.rxDone= true;
-	Radio.GetPayload( RxBuffer, &RxBufferSize, RX_BUFFER_SIZE );
+	Radio.GetPayload( rxInfo.buffer, &rxInfo.buffer_length, RX_BUFFER_SIZE );
     HAL_GPIO_WritePin(SX_LED_RX_GPIO_Port, SX_LED_RX_Pin, GPIO_PIN_RESET); // Turn LED On
 //	RunRXStateMachine();
 

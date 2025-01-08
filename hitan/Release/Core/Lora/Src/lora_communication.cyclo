@@ -1,4 +1,0 @@
-../Core/Lora/Src/lora_communication.c:33:6:WriteBuffer_Spi	1
-../Core/Lora/Src/lora_communication.c:16:6:WriteRegister_Spi	1
-../Core/Lora/Src/lora_communication.c:47:6:ReadBuffer_Spi	1
-../Core/Lora/Src/lora_communication.c:24:9:ReadRegister_Spi	1

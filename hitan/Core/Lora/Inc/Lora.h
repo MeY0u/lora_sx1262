@@ -36,6 +36,8 @@ typedef struct{
     uint32_t rxTimeout;
 }RadioConfigurations_t;
 
+
+
 typedef struct{
     bool rxDone;
     bool rxError;
@@ -51,7 +53,7 @@ extern SPI_HandleTypeDef hspi1;
 #define tag_dest 22
 #define ANCHOR_NUM 3
 #define MESSAGE_SIZE 1
-#define RX_BUFFER_SIZE 20
+#define RX_BUFFER_SIZE 2
 typedef uint8_t Messages_t[MESSAGE_SIZE];
 //const Messages_t PingMsg = {'L', 'I', 'R', 'O'};
 #define MAX_INDEX 255
@@ -67,7 +69,7 @@ typedef uint8_t Messages_t[MESSAGE_SIZE];
                                                                   //  1: 250 kHz,
                                                                   //  2: 500 kHz,
                                                                   //  3: Reserved]
-#define LORA_SPREADING_FACTOR                       LORA_SF10      // [SF7..SF12]
+#define LORA_SPREADING_FACTOR                       LORA_SF7      // [SF7..SF12]
 #define LORA_LOWDATARATEOPTIMIZE                    0
 #define LORA_CODINGRATE                             LORA_CR_4_5   // [1: 4/5,
                                                                   //  2: 4/6,

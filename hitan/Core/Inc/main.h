@@ -39,6 +39,14 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
+typedef struct {
+    uint8_t buffer[2];
+    uint8_t buffer_length;
+    int8_t rssi;		// average rssi
+    int8_t snr;
+    bool new_data;
+    int8_t TxCounter;
+}LoraRxInfo_t;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -59,6 +67,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define SKU_WAKEUP_Pin GPIO_PIN_3
+#define SKU_WAKEUP_GPIO_Port GPIOF
 #define SX_LED_RX_Pin GPIO_PIN_0
 #define SX_LED_RX_GPIO_Port GPIOC
 #define SX_LED_TX_Pin GPIO_PIN_1
@@ -90,6 +100,18 @@ void Error_Handler(void);
 #define SX_BUSY_GPIO_Port GPIOE
 #define UCPD_FLT_Pin GPIO_PIN_14
 #define UCPD_FLT_GPIO_Port GPIOB
+#define SKU_RESET_Pin GPIO_PIN_8
+#define SKU_RESET_GPIO_Port GPIOC
+#define SKU_IRQ_Pin GPIO_PIN_9
+#define SKU_IRQ_GPIO_Port GPIOC
+#define SKU_SPI3_SCK_Pin GPIO_PIN_10
+#define SKU_SPI3_SCK_GPIO_Port GPIOC
+#define SKU_SPI3_MISO_Pin GPIO_PIN_11
+#define SKU_SPI3_MISO_GPIO_Port GPIOC
+#define SKU_SPI3_MOSI_Pin GPIO_PIN_12
+#define SKU_SPI3_MOSI_GPIO_Port GPIOC
+#define SKU_CS_Pin GPIO_PIN_2
+#define SKU_CS_GPIO_Port GPIOD
 #define UCPD_DBn_Pin GPIO_PIN_5
 #define UCPD_DBn_GPIO_Port GPIOB
 

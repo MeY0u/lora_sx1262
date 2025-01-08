@@ -1,0 +1,4 @@
+../Core/Src/dw1000.c:6:5:dwmInit	8	static
+../Core/Src/dw1000.c:22:6:dwConfig	16	static
+../Core/Src/dw1000.c:54:5:dwRange	80	static,ignoring_inline_asm
+../Core/Src/dw1000.c:185:13:resp_msg_get_ts	24	static

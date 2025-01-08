@@ -12,8 +12,11 @@ RM := rm -rf
 -include Drivers/STM32U5xx_HAL_Driver/Src/subdir.mk
 -include Drivers/BSP/STM32U5xx_Nucleo/subdir.mk
 -include Core/Startup/subdir.mk
+-include Core/Src/platform/subdir.mk
+-include Core/Src/decadriver/subdir.mk
 -include Core/Src/subdir.mk
 -include Core/Lora/Src/subdir.mk
+-include Core/Lora/Inc/Sx126x_Lib/subdir.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -86,8 +89,8 @@ all: main-build
 main-build: hitan.elf secondary-outputs
 
 # Tool invocations
-hitan.elf hitan.map: $(OBJS) $(USER_OBJS) C:\IAF\hitan_11052024\hitan_stm_temp_copy\hitan\STM32U5A5ZJTXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "hitan.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\IAF\hitan_11052024\hitan_stm_temp_copy\hitan\STM32U5A5ZJTXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="hitan.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+hitan.elf hitan.map: $(OBJS) $(USER_OBJS) C:\Genadi\Work\army\Hitan_liron\Lora_sx1262\lora_sx1262\hitan\STM32U5A5ZJTXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "hitan.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Genadi\Work\army\Hitan_liron\Lora_sx1262\lora_sx1262\hitan\STM32U5A5ZJTXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="hitan.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

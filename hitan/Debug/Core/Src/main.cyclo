@@ -1,8 +1,9 @@
-../Core/Src/main.cpp:74:5:int main()	2
-../Core/Src/main.cpp:146:6:void SystemClock_Config()	4
-../Core/Src/main.cpp:200:13:void SystemPower_Config()	2
-../Core/Src/main.cpp:224:13:void MX_ICACHE_Init()	3
-../Core/Src/main.cpp:256:13:void MX_SPI1_Init()	3
-../Core/Src/main.cpp:313:13:void MX_TIM2_Init()	4
-../Core/Src/main.cpp:358:13:void MX_GPIO_Init()	1
-../Core/Src/main.cpp:477:6:void Error_Handler()	1
+../Core/Src/main.cpp:79:5:int main()	3
+../Core/Src/main.cpp:164:6:void SystemClock_Config()	4
+../Core/Src/main.cpp:218:13:void SystemPower_Config()	2
+../Core/Src/main.cpp:242:13:void MX_ICACHE_Init()	3
+../Core/Src/main.cpp:274:13:void MX_SPI1_Init()	3
+../Core/Src/main.cpp:330:13:void MX_SPI3_Init()	3
+../Core/Src/main.cpp:387:13:void MX_TIM2_Init()	4
+../Core/Src/main.cpp:432:13:void MX_GPIO_Init()	1
+../Core/Src/main.cpp:574:6:void Error_Handler()	1
