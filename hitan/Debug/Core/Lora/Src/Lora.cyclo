@@ -1,21 +1,21 @@
-../Core/Lora/Src/Lora.cpp:40:6:void Lora_init()	1
-../Core/Lora/Src/Lora.cpp:148:6:void Lora_Operation_RX()	1
-../Core/Lora/Src/Lora.cpp:157:6:void RunRXStateMachine()	8
-../Core/Lora/Src/Lora.cpp:202:6:void Lora_Operation_TX()	1
-../Core/Lora/Src/Lora.cpp:215:6:void RunTXStateMachine()	6
-../Core/Lora/Src/Lora.cpp:254:6:void ConfigureRadioTx(SX126xHal*, RadioConfigurations_t*)	1
-../Core/Lora/Src/Lora.cpp:258:6:void ConfigureRadioRx(SX126xHal*, RadioConfigurations_t*)	1
-../Core/Lora/Src/Lora.cpp:262:6:void PrepareBuffer(SX126xHal*, const uint8_t (*)[1])	1
-../Core/Lora/Src/Lora.cpp:266:6:void OnRxDone()	1
-../Core/Lora/Src/Lora.cpp:277:6:void OnRxTimeout()	1
-../Core/Lora/Src/Lora.cpp:282:6:void OnRxError(IrqErrorCode_t)	1
-../Core/Lora/Src/Lora.cpp:287:6:void OnTxDone()	1
-../Core/Lora/Src/Lora.cpp:293:6:void OnTxTimeout()	1
-../Core/Lora/Src/Lora.cpp:299:6:void SetConfiguration(RadioConfigurations_t*)	1
-../Core/Lora/Src/Lora.cpp:320:6:void ChangeConfigurations(RadioConfigurations_t*, RadioLoRaBandwidths_t, RadioLoRaCodingRates_t, RadioLoRaSpreadingFactors_t)	1
-../Core/Lora/Src/Lora.cpp:325:6:void ConfigureGeneralRadio(SX126xHal*, RadioConfigurations_t*)	1
-../Core/Lora/Src/Lora.cpp:340:6:void HAL_GPIO_EXTI_Rising_Callback(uint16_t)	2
-../Core/Lora/Src/Lora.cpp:355:6:void GetRssiSnr(int8_t*, int8_t*)	1
-../Core/Lora/Src/Lora.cpp:362:1:void __static_initialization_and_destruction_0(int, int)	5
-../Core/Lora/Src/Lora.cpp:362:1:cpp)	1
-../Core/Lora/Src/Lora.cpp:362:1:cpp)	1
+../Core/Lora/Src/Lora.cpp:41:6:void Lora_init()	1
+../Core/Lora/Src/Lora.cpp:147:6:void Lora_Operation_RX()	1
+../Core/Lora/Src/Lora.cpp:156:6:void RunRXStateMachine()	8
+../Core/Lora/Src/Lora.cpp:201:6:void Lora_Operation_TX()	1
+../Core/Lora/Src/Lora.cpp:214:6:void RunTXStateMachine()	6
+../Core/Lora/Src/Lora.cpp:253:6:void ConfigureRadioTx(SX126xHal*, RadioConfigurations_t*)	1
+../Core/Lora/Src/Lora.cpp:257:6:void ConfigureRadioRx(SX126xHal*, RadioConfigurations_t*)	1
+../Core/Lora/Src/Lora.cpp:261:6:void PrepareBuffer(SX126xHal*, const uint8_t (*)[1])	1
+../Core/Lora/Src/Lora.cpp:265:6:void OnRxDone()	1
+../Core/Lora/Src/Lora.cpp:276:6:void OnRxTimeout()	1
+../Core/Lora/Src/Lora.cpp:281:6:void OnRxError(IrqErrorCode_t)	1
+../Core/Lora/Src/Lora.cpp:286:6:void OnTxDone()	1
+../Core/Lora/Src/Lora.cpp:292:6:void OnTxTimeout()	1
+../Core/Lora/Src/Lora.cpp:298:6:void SetConfiguration(RadioConfigurations_t*)	1
+../Core/Lora/Src/Lora.cpp:319:6:void ChangeConfigurations(RadioConfigurations_t*, RadioLoRaBandwidths_t, RadioLoRaCodingRates_t, RadioLoRaSpreadingFactors_t)	1
+../Core/Lora/Src/Lora.cpp:324:6:void ConfigureGeneralRadio(SX126xHal*, RadioConfigurations_t*)	1
+../Core/Lora/Src/Lora.cpp:339:6:void HAL_GPIO_EXTI_Rising_Callback(uint16_t)	2
+../Core/Lora/Src/Lora.cpp:354:6:void GetRssiSnr(int8_t*, int8_t*)	1
+../Core/Lora/Src/Lora.cpp:361:1:void __static_initialization_and_destruction_0(int, int)	5
+../Core/Lora/Src/Lora.cpp:361:1:cpp)	1
+../Core/Lora/Src/Lora.cpp:361:1:cpp)	1

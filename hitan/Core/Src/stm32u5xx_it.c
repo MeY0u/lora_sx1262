@@ -90,6 +90,7 @@ void HardFault_Handler(void)
   {
     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
 	  printf("HardFault Handler\n\r");
+	  HAL_Delay(100);
     /* USER CODE END W1_HardFault_IRQn 0 */
   }
 }

@@ -38,9 +38,12 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
+#define VERSION "v1.1"
+
+#define RX_BUFFER_SIZE 20
 
 typedef struct {
-    uint8_t buffer[2];
+    uint8_t buffer[RX_BUFFER_SIZE];
     uint8_t buffer_length;
     int8_t rssi;		// average rssi
     int8_t snr;
@@ -116,7 +119,6 @@ void Error_Handler(void);
 #define UCPD_DBn_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -1,5 +1,6 @@
 #include "../Lora/Inc/Lora.h"
 #include <stm32u5xx_hal_def.h>
+#include "main.h"
 /*!
  * Radio events function pointer
  */
@@ -39,14 +40,12 @@ SX126xHal Radio(&hspi1, SX_SPI1_CS_GPIO_Port, SX_SPI1_CS_Pin,
 
 void Lora_init()
 {
-	RxState = RECEIVE_PACKET;
+//	RxState = RECEIVE_PACKET;
 	Radio.Init();
 	SetConfiguration(&radioConfiguration);
 	ConfigureGeneralRadio(&Radio, &radioConfiguration);
-	Radio.SetRx(radioConfiguration.rxTimeout);
+//	Radio.SetRx(radioConfiguration.rxTimeout);
 
-	rxInfo.buffer[0] = 0;
-	rxInfo.buffer[1] = 0;
 	rxInfo.buffer_length = RX_BUFFER_SIZE;
 	rxInfo.rssi = 0;
 	rxInfo.snr = 0;
@@ -175,7 +174,6 @@ void RunRXStateMachine(){
 				}
 				radioFlags.rxDone = false;
 				RxState = PACKET_RECEIVED;
-				free(rxInfo.buffer);
 
 	        }
 			if(radioFlags.rxTimeout == true){
@@ -187,12 +185,13 @@ void RunRXStateMachine(){
 
 	    case PACKET_RECEIVED:{
 	    	__disable_irq();
-	    	Radio.GetPayload( rxInfo.buffer, &rxInfo.buffer_length, RX_BUFFER_SIZE );
+	    	Radio.GetPayload( rxInfo.buffer, &rxInfo.buffer_length, RX_BUFFER_SIZE);
 	    	rxInfo.rssi = Radio.GetRssiInst();
 	    	rxInfo.new_data = true;
 	    	GetRssiSnr(&rxInfo.rssi, &rxInfo.snr);
 	    	RxState = RECEIVE_PACKET;
-	    	printf("%d , %d \n", rxInfo.rssi,rxInfo.snr);
+//			printf("buffer = %d\n\r", rxInfo.buffer[0]);
+//	    	printf("%d , %d \n", rxInfo.rssi,rxInfo.snr);
 
 	    	__enable_irq();
 	    	break;

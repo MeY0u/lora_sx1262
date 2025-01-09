@@ -53,7 +53,7 @@ extern SPI_HandleTypeDef hspi1;
 #define tag_dest 22
 #define ANCHOR_NUM 3
 #define MESSAGE_SIZE 1
-#define RX_BUFFER_SIZE 2
+//#define RX_BUFFER_SIZE 2
 typedef uint8_t Messages_t[MESSAGE_SIZE];
 //const Messages_t PingMsg = {'L', 'I', 'R', 'O'};
 #define MAX_INDEX 255

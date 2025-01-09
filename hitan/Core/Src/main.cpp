@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-////////////////////////////////////////////////////////////////////////////////////////// v1.0.0
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "dw1000.h"
@@ -133,8 +132,15 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  printf("\n\n\n");
+  printf("----------------------\r\n");
+  printf("	Version code: %s \r\n", VERSION);
+  printf("----------------------\r\n");
+  printf("\n\n\n");
 //  	  Lora_Operation_TX();
-//  Lora_Operation_RX();
+
+//  	  Lora_Operation_RX();
 
   	  if(!dwmInit()) {// init failed
   		  printf("Init Failed\r\n");

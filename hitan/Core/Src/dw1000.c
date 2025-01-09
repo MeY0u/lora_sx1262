@@ -118,9 +118,8 @@ int dwRange(void)
 			distance = tof * SPEED_OF_LIGHT;
 			if (rxInfo.new_data){
 				__disable_irq();
-				printf("*0x%x:0x%x:%3.2f|0x%x:%3.1f:%d:%d#\n\r",ANCHOR_NUM, tag_dest, distance,ANCHOR_NUM,rxInfo.rssi,rxInfo.snr,*rxInfo.buffer);
+				printf("*0x%x:0x%x:%3.2f|0x%x:%d:%d:%d#\n\r",ANCHOR_NUM, tag_dest, distance,ANCHOR_NUM,(int)rxInfo.rssi,(int)rxInfo.snr, rxInfo.buffer[0]);
 				rxInfo.new_data = false;
-				free(rxInfo.buffer);
 				__enable_irq();
 			}
 			else {
@@ -132,9 +131,8 @@ int dwRange(void)
 		else{
 			if (rxInfo.new_data){
 				__disable_irq();
-				printf("*0x%x:0x%x:0000|0x%x:%3.1f:%d:%d#\n\r",ANCHOR_NUM, tag_dest,ANCHOR_NUM,rxInfo.rssi,rxInfo.snr,*rxInfo.buffer);
+				printf("*0x%x:0x%x:0000|0x%x:%d:%d:%d#\n\r",ANCHOR_NUM, tag_dest,ANCHOR_NUM,(int)rxInfo.rssi, (int)rxInfo.snr, rxInfo.buffer[0]);
 				rxInfo.new_data = false;
-				free(rxInfo.buffer);
 				__enable_irq();
 			}
 			else {
@@ -150,9 +148,9 @@ int dwRange(void)
 		dwt_write32bitreg(SYS_STATUS_ID, SYS_STATUS_ALL_RX_TO | SYS_STATUS_ALL_RX_ERR);
 		if (rxInfo.new_data){
 				__disable_irq();
-				printf("*0x%x:0x%x:0000|0x%x:%3.1f:%d:%d#\n\r",ANCHOR_NUM, tag_dest,ANCHOR_NUM,rxInfo.rssi,rxInfo.snr,*rxInfo.buffer);
+				printf("*0x%x:0x%x:0000|0x%x:%d:%d:%d#\n\r",ANCHOR_NUM, tag_dest,ANCHOR_NUM,(int)rxInfo.rssi, (int)rxInfo.snr, rxInfo.buffer[0]);
 				rxInfo.new_data = false;
-				free(rxInfo.buffer);
+
 				__enable_irq();
 			}
 			else {
